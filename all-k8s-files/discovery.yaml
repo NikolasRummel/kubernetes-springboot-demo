@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discovery
+  labels:
+    app: discovery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discovery
+  template:
+    metadata:
+      labels:
+        app: discovery
+    spec:
+      containers:
+        - name: discovery
+          image: cubepixels/cubidshop-discovery-service
+          ports:
+            - containerPort: 8061
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: discovery
+  labels:
+    app: discovery
+    spring-boot: "true"
+spec:
+  type: ClusterIP
+  clusterIP: 10.99.234.82
+  ports:
+    - port: 8061
+      protocol: TCP
+  selector:
+    app: discovery

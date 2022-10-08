@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config
+  labels:
+    app: config
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config
+  template:
+    metadata:
+      labels:
+        app: config
+    spec:
+      containers:
+        - name: config
+          image: cubepixels/cubidshop-config-service
+          ports:
+            - containerPort: 8088
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config
+  labels:
+    app: config
+    spring-boot: "true"
+spec:
+  type: ClusterIP
+  clusterIP: 10.96.80.201
+  ports:
+    - port: 8088
+      targetPort: 8088
+      protocol: TCP
+  selector:
+    app: config
